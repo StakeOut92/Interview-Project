@@ -2,27 +2,34 @@ package pages;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import ru.yandex.qatools.htmlelements.annotations.Name;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.HtmlElement;
-import ru.yandex.qatools.htmlelements.element.Select;
+import ru.yandex.qatools.htmlelements.element.Radio;
 import ru.yandex.qatools.htmlelements.element.TextInput;
 import ru.yandex.qatools.htmlelements.loader.decorator.HtmlElementDecorator;
 import ru.yandex.qatools.htmlelements.loader.decorator.HtmlElementLocatorFactory;
 
+import java.security.Key;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
+
+import static java.util.Locale.ENGLISH;
 
 public class CreateInterviewPage extends HtmlElement {
     private static final Logger LOGGER = LogManager.getLogger("Interview");
     WebDriver driver;
-    String filePath = "resources/Selenium_Logo.png";
+    String filePath = "C:\\Users\\inoze\\IdeaProjects\\Interview Project\\src\\test\\resources\\Selenium_Logo.png";
 
     @Name("Interview button")
     @FindBy(className = "cardStudyName")
@@ -61,16 +68,16 @@ public class CreateInterviewPage extends HtmlElement {
     private TextInput uploadImageFile;
 
     @Name("Slider")
-    @FindBy(xpath = "//input[@class='form-control form-control-readonly']")
-    private TextInput sliderValue;
+    @FindBy(id = "simple-slider")
+    private WebElement sliderValue;
 
     @Name("Radio button 1")
-    @FindBy(id = "gwt-uid-143")
-    private Button radioButton1;
+    @FindBy(id = "gwt-uid-135")
+    private Radio radioButton1;
 
     @Name("Radio button 2")
-    @FindBy(id = "gwt-uid-150")
-    private Button radioButton2;
+    @FindBy(id = "gwt-uid-142")
+    private Radio radioButton2;
 
     @Name("Cancel button")
     @FindBy(xpath = "//div[@class='myHealthButtonsBottom']//span[text()='Cancel']")
@@ -113,38 +120,41 @@ public class CreateInterviewPage extends HtmlElement {
     public void fillDate() {
         LOGGER.info("Start method fillDate");
         String pattern = "MMM dd, YYYY";
-        DateFormat df = new SimpleDateFormat(pattern);
+        DateFormat df = new SimpleDateFormat(pattern, Locale.ENGLISH);
         Date today = Calendar.getInstance().getTime();
         datefield.sendKeys(df.format(today));
+        datefield.sendKeys(Keys.ENTER);
     }
 
     public void dropDownSelect() {
         LOGGER.info("Start method dropDownSelect");
-        Select dropDownInput = new Select(dropDown);
-        dropDownInput.selectByValue("Yes");
+        dropDown.sendKeys("Yes");
+        dropDown.sendKeys(Keys.ENTER);
     }
 
-    public void imageUpload(){
+    public void imageUpload() {
         LOGGER.info("Start method imageUpload");
         uploadImageFile.sendKeys(filePath);
     }
 
-    public void slideSlider(){
+    public void slideSlider() {
         LOGGER.info("Start method slideSlider");
-        sliderValue.sendKeys("25");
+        Actions action = new Actions(driver);
+        action.dragAndDropBy(sliderValue,10,0).click();
+        action.build().perform();
     }
 
-    public void clickRadioButton1(){
+    public void clickRadioButton1() {
         LOGGER.info("Start method clickRadioButton1");
         radioButton1.click();
     }
 
-    public void clickRadioButton2(){
+    public void clickRadioButton2() {
         LOGGER.info("Start method clickRadioButton2");
         radioButton2.click();
     }
 
-    public void clickCancelButton(){
+    public void clickCancelButton() {
         LOGGER.info("Start method clickCancelButton");
         cancelButton.click();
     }
